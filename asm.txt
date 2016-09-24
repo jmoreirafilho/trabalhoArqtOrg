@@ -1,3 +1,6 @@
-push 3,1
-mov 132,541
-add 13,2
+ADD 3,14
+mov A,14
+mOv 0x10,54
+Imul 13,2,5
+add A, 2
+INC 0x001
