@@ -139,10 +139,11 @@ class EntradaSaida
 		}
 	}
 
-	public function pegaLinha($linha)
+	public function buffer($linhaAtual)
 	{
-		self::buffer() $this->conteudo[$linha];
+		return $this->conteudo[$linhaAtual];
 	}
+
 }
 
 ?>

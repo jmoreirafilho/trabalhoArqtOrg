@@ -8,7 +8,7 @@ class CPU
 	
 	function __construct()
 	{
-		echo "oi";
+		// echo "oi";
 	}
 }
  ?>
