@@ -8,26 +8,32 @@ class Barramento {
 	private $EntradaSaida;
 	private $MemoriaRam;
 	private $CPU;
-	private $Unit;
 
 	public $linhaAtual = 0;
 
 	function __construct()
 	{
-		// Inicializa EntradaSaida para pegar o conteudo e "compilar"
-		$this->EntradaSaida = new EntradaSaida();
-		$this->MemoriaRam = new MemoriaRam();
-		$this->CPU = new CPU();
 		self::enviaBufferParaRam();
 	}
 
+	/**
+	 * Chama as classes EntradaSaida e MemoriaRam e pega o comando em Buffer,
+	 * de acordo com a linhaAtual
+	*/
 	public function enviaBufferParaRam()
 	{
+		// chama classe EntradaSaida
+		$this->EntradaSaida = new EntradaSaida();
 		// pega o comando
 		$comando = $this->EntradaSaida->buffer($this->linhaAtual);
 
+		// chama classe MemoriaRam
+		$this->MemoriaRam = new MemoriaRam();
 		// joga o comando na RAM
 		$this->MemoriaRam->recebeComando($comando);
+
+		// Passa para a próxima linha do código
+		$this->linhaAtual++;
 	}
 }
 

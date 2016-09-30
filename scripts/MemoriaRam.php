@@ -72,6 +72,8 @@ class MemoriaRam
 
 		// seta posicao da memoria para a proxima disponivel
 		self::avancaPosicaoDaMemoria();
+
+		// processa dados na CPU
 	}
 
 	/**

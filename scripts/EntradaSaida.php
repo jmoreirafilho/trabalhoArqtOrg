@@ -2,33 +2,36 @@
 
 class EntradaSaida 
 {
-	/*
-		1 -> MOV
-		2 -> ADD
-		3 -> IMUL
-		4 -> INC
-		--------------
-		-1 -> NULL
-		-2 -> A
-		-3 -> B
-		-4 -> C
-		-5 -> D
+	/**
+	 * DICIONARIO
+	 * 1 = MOV
+	 * 2 = ADD
+	 * 3 = IMUL
+	 * 4 = INC
+	 * -1 = NULL
+	 * -2 = A
+	 * -3 = B
+	 * -4 = C
+	 * -5 = D
 	*/
-
 
 	public $conteudo = [];
 
-	/*
-		Inicia o leitor de arquivo
+	/**
+	 * Chama o metodo para ler o arquivo
 	*/
 	function __construct()
 	{
 		self::lerArquivo();
 	}
 
-	/*
-		Recebe o conteudo e valida a sintaxe para saber se tem algum erro
-	*/
+	/**
+	 * Valida o conteudo recebido através de regex e converte os valores, adicionando
+	 * no array de conteudo
+	 * 
+	 * @param string $conteudo Linha do código ASM para ser validada.
+	 * @return Retorna um Array, caso não haja erro, retorna true, caso haja, retorna false e o numero da linha
+   	*/
 	function conversorSinstatico($conteudo)
 	{
 		$i = 1;
@@ -121,10 +124,9 @@ class EntradaSaida
 		return [true];
 	}
 
-	/*
-		Pega arquivo, quebra as linhas em um array e chama a função para validar a sintaxe
-		Caso seja valido, grava na variavel global
-		Caso não seja valido, exibe o erro
+	/**
+	 * Pega arquivo, quebra as linhas em um array e chama a função para validar
+	 * a sintaxe. Exibe o erro, caso a validação falhe.
 	*/
 	function lerArquivo()
 	{
@@ -139,6 +141,12 @@ class EntradaSaida
 		}
 	}
 
+	/**
+	 * Recebe um id e retorna o conteudo dessa linha.
+	 * 
+	 * @param int $linhaAtual Id da linha no array de conteudo.
+	 * @return Conteudo na posição informada do array de conteudo.
+	*/
 	public function buffer($linhaAtual)
 	{
 		return $this->conteudo[$linhaAtual];
