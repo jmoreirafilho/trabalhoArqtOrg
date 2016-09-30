@@ -2,6 +2,7 @@
 
 class MemoriaRam 
 {
+	public $gravouNaMemoria = false;
 	public $posicaoDaMemoria = 0;
 	public $memoria = [
 		-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
@@ -10,7 +11,7 @@ class MemoriaRam
 
 	function __construct()
 	{
-		// não faz nada
+		$this->gravouNaMemoria = false;
 	}
 
 	/**
@@ -73,7 +74,7 @@ class MemoriaRam
 		// seta posicao da memoria para a proxima disponivel
 		self::avancaPosicaoDaMemoria();
 
-		// processa dados na CPU
+		$this->gravouNaMemoria = true;
 	}
 
 	/**

@@ -1,6 +1,7 @@
 <?php 
 
 include('MemoriaRam.php');
+include('CPU.php');
 
 /**
 * 
@@ -9,10 +10,12 @@ class TesteUnitario
 {
 	
 	private $MemoriaRam;
+	private $CPU;
 
 	function __construct()
 	{
-		self::testaMemoriaRam();
+		// self::testaMemoriaRam();
+		self::testaCPU();
 	}
 
 	/**
@@ -23,6 +26,15 @@ class TesteUnitario
 		$this->MemoriaRam = new MemoriaRam();
 		print_r($this->MemoriaRam->possuiEspacoNaMemoria());
 		print_r($this->MemoriaRam->recebeComando([2,3,14,-1]));
+	}
+
+	/**
+	 * Chama e testa todos os metodos da classe CPU
+	*/
+	public function testaCPU()
+	{
+		$this->CPU = new CPU();
+		print_r($this->CPU->processaComandoAdd([2, -2, -3, -1]));
 	}
 }
 
