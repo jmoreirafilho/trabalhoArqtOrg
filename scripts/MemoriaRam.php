@@ -14,7 +14,7 @@ class MemoriaRam
 	}
 
 	/**
-	 * Verifica se possui espaço nos 16 primeiros bits da memoria
+	 * Verifica se possui espaço nos 16 primeiros bits da memoria.
 	 * 
 	 * @return Retorna true se possuir espaço, false caso contrário.
 	*/
@@ -29,14 +29,31 @@ class MemoriaRam
 	}
 
 	/**
-	 * Percorre os primeiro 16 bits, em grupos de 4 em 4, procurando qual o primeiro
-	 * valor ocupado. Remove esses 4 bits.
+	 * Avança posição da memória para o próximo grupo de 4 bits, dentro dos 16 primeiros.
+	*/
+	public function avancaPosicaoDaMemoria()
+	{
+		$this->posicaoDaMemoria += 4;
+
+		if($this->posicaoDaMemoria == 16){
+			$this->posicaoDaMemoria = 0;
+		}
+	}
+
+	/**
+	 * Pula para a próxima posição, dentro dos 16 primeiros bits. Setando os 4 bits
+	 * desse grupo para -1 e seta a posição da memória para a posição esvaziada.
 	*/
 	public function esvaziaMemoria()
 	{
-		$posicao = $this->posicaoDaMemoria;
-		$posicao += 4;
+		// seta posicao da memoria para a proxima disponivel
+		self::avancaPosicaoDaMemoria();
 
+		// esvazia o grupo dessa posição
+		$this->memoria[$this->posicaoDaMemoria] = -1;
+		$this->memoria[$this->posicaoDaMemoria + 1] = -1;
+		$this->memoria[$this->posicaoDaMemoria + 2] = -1;
+		$this->memoria[$this->posicaoDaMemoria + 3] = -1;
 	}
 
 	/**
@@ -47,7 +64,14 @@ class MemoriaRam
 
 	public function adicionaNaMemoria($comando)
 	{
-		# code...
+		// seta os comando na memoria atual, que deve estar vazia
+		$this->memoria[$this->posicaoDaMemoria] = $comando[0];
+		$this->memoria[$this->posicaoDaMemoria + 1] = $comando[1];
+		$this->memoria[$this->posicaoDaMemoria + 2] = $comando[2];
+		$this->memoria[$this->posicaoDaMemoria + 3] = $comando[3];
+
+		// seta posicao da memoria para a proxima disponivel
+		self::avancaPosicaoDaMemoria();
 	}
 
 	/**
@@ -60,10 +84,8 @@ class MemoriaRam
 	{
 		if(!self::possuiEspacoNaMemoria()){
 			self::esvaziaMemoria();
-			return true;
 		}
 		self::adicionaNaMemoria($comando);
-		return false;
 	}
 
 }
