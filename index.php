@@ -18,7 +18,7 @@ class Barramento {
 		// chama classe EntradaSaida
 		$this->EntradaSaida = new EntradaSaida();
 		// chama classe MemoriaRam
-		$this->MemoriaRam = new MemoriaRam();
+		$this->MemoriaRam = new MemoriaRam(); 
 		
 		self::enviaBufferParaRam();
 	}
