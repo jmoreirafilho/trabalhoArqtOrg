@@ -13,14 +13,15 @@ class Barramento {
 
 	function __construct()
 	{
-		// chama classe CPU
-		$this->CPU = new CPU();
 		// chama classe EntradaSaida
 		$this->EntradaSaida = new EntradaSaida();
 		// chama classe MemoriaRam
 		$this->MemoriaRam = new MemoriaRam();
-		
-		self::enviaBufferParaRam();
+		// chama classe CPU
+		$this->CPU = new CPU();
+		if(count($this->EntradaSaida->conteudo) > 0){
+			self::enviaBufferParaRam();
+		}
 	}
 
 	/**

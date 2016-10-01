@@ -176,5 +176,17 @@ class CPU
 	{
 		
 	}
+
+	/**
+	 * Recebe um comando para ser processado, verifica qual o tipo de comando
+	 * e chama o método para esse tipo verificado.
+	 * 
+	 * @param type $comando 
+	 * @return type
+	 */
+	public function processaComando($comando)
+	{
+		# code...
+	}
 }
  ?>

@@ -1,4 +1,4 @@
-ADD 3,14
+ADD A,14
 mov A,14
 mOv 0x10,54
 Imul 13,2,5

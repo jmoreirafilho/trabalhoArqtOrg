@@ -36,7 +36,7 @@ class EntradaSaida
 	{
 		$i = 1;
 		foreach($conteudo AS $linha) {
-			if (preg_match("/^mov\s+([ABCD])\s*,\s*(\d+)$/i", strtoupper($linha), $acertos)) {
+			if (preg_match("/^MOV\s+([ABCD])\s*,\s*(\d+)\s*$/i", strtoupper($linha), $acertos)) {
 				/*
 				* MOV (registrador), numero
 				*/
@@ -57,7 +57,7 @@ class EntradaSaida
 				}
 				continue;
 			}
-			else if (preg_match("/^mov\s+0X0*(\w\w)\s*,\s*(\d+)$/i", strtoupper($linha), $acertos)) {
+			else if (preg_match("/^MOV\s+0X0*(\w\w)\s*,\s*(\d+)\s*$/i", strtoupper($linha), $acertos)) {
 				/*
 				* MOV (posiçao da memoria), numero
 				*/
@@ -67,7 +67,7 @@ class EntradaSaida
 				}
 				array_push($this->conteudo, [1, hexdec($acertos[1]), $acertos[2], -1]);
 			}
-			else if (preg_match("/^mov\s+0X0(\w\w)\s*,\s*(\d+)$/i", strtoupper($linha), $acertos)) {
+			else if (preg_match("/^mov\s+0X0(\w\w)\s*,\s*(\d+)\s*$/i", strtoupper($linha), $acertos)) {
 				/*
 				* MOV (posição da memoria), (registrador)
 				*/
@@ -77,15 +77,15 @@ class EntradaSaida
 				}
 				array_push($this->conteudo, [1, hexdec($acertos[1]), $acertos[2], -1]);
 			}
-			else if (preg_match("/^add\s+([ABCD])\s*,\s*(\d+)$/i", strtoupper($linha), $acertos)) {
+			else if (preg_match("/^ADD\s+([ABCD])\s*,\s*(\d+)\s*$/i", strtoupper($linha), $acertos)) {
 				/*
-				* ADD ([ABCD]]), (numero)
+				* ADD ([ABCD]), (numero)
 				*/
 				$i++;
 				array_push($this->conteudo, [2, $acertos[1], $acertos[2], -1]);
 				continue;
 			}
-			else if (preg_match("/^add\s+(\d+)\s*,\s*(\d+)$/i", strtoupper($linha), $acertos)) {
+			else if (preg_match("/^ADD\s+(\d+)\s*,\s*(\d+)\s*$/i", strtoupper($linha), $acertos)) {
 				/*
 				* ADD (numero), (numero)
 				*/
@@ -93,7 +93,7 @@ class EntradaSaida
 				array_push($this->conteudo, [2, $acertos[1], $acertos[2], -1]);
 				continue;
 			}
-			else if (preg_match("/^imul\s+(\d+)\s*,\s*(\d+),\s*(\d+)$/i", strtoupper($linha), $acertos)) {
+			else if (preg_match("/^IMUL\s+(\d+)\s*,\s*(\d+),\s*(\d+)\s*$/i", strtoupper($linha), $acertos)) {
 				/*
 				* IMUL (numero), (numero), (numero)
 				*/ 
@@ -101,7 +101,7 @@ class EntradaSaida
 				array_push($this->conteudo, [3, $acertos[1], $acertos[2], -1]);
 				continue;
 			}
-			else if (preg_match("/^inc\s+(\dX\d+)$/i", strtoupper($linha), $acertos)) { 
+			else if (preg_match("/^INC\s+(\dX\d+)\s*$/i", strtoupper($linha), $acertos)) { 
 				/*
 				* INC (posião na memória)
 				*/
@@ -109,7 +109,7 @@ class EntradaSaida
 				array_push($this->conteudo, [3, $acertos[1], -1, -1]);
 				continue;
 			}
-			else if (preg_match("/^inc\s+(\w)$/i", strtoupper($linha), $acertos)) { 
+			else if (preg_match("/^INC\s+(\w)\s*$/i", strtoupper($linha), $acertos)) { 
 				/*
 				* INC (registrador)
 				*/
@@ -118,6 +118,8 @@ class EntradaSaida
 				continue;
 			}
 			else {
+				echo strtoupper($linha);
+
 				return [false, $i];
 			}
 		}
