@@ -19,6 +19,7 @@ class Barramento {
 		$this->MemoriaRam = new MemoriaRam();
 		// chama classe CPU
 		$this->CPU = new CPU();
+		
 		if(count($this->EntradaSaida->conteudo) > 0){
 			self::enviaBufferParaRam();
 		}
