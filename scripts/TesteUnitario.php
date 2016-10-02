@@ -2,6 +2,7 @@
 
 include('MemoriaRam.php');
 include('CPU.php');
+include('EntradaSaida.php');
 
 /**
 * 
@@ -11,11 +12,13 @@ class TesteUnitario
 	
 	private $MemoriaRam;
 	private $CPU;
+	private $EntradaSaida;
 
 	function __construct()
 	{
 		// self::testaMemoriaRam();
-		self::testaCPU();
+		// self::testaCPU();
+		self::testaEntradaSaida();
 	}
 
 	/**
@@ -35,6 +38,13 @@ class TesteUnitario
 	{
 		$this->CPU = new CPU();
 		print_r($this->CPU->processaComandoAdd([2, -2, -3, -1]));
+	}
+
+	public function testaEntradaSaida()
+	{
+		$this->EntradaSaida = new EntradaSaida();
+		$this->EntradaSaida->conversorSinstatico(["mov 0X01, 5"]);
+		print_r($this->EntradaSaida->conteudo);
 	}
 }
 

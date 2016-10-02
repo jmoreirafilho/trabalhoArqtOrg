@@ -15,11 +15,13 @@ class Barramento {
 	{
 		// chama classe EntradaSaida
 		$this->EntradaSaida = new EntradaSaida();
+		// lê arquivo e grava em $conteudo
+		$this->EntradaSaida->lerArquivo();
 		// chama classe MemoriaRam
 		$this->MemoriaRam = new MemoriaRam();
 		// chama classe CPU
 		$this->CPU = new CPU();
-		
+
 		if(count($this->EntradaSaida->conteudo) > 0){
 			self::enviaBufferParaRam();
 		}
@@ -34,11 +36,11 @@ class Barramento {
 	public function processaComandoNaCpu($comando)
 	{
 
-		// envia o comando para a CPU processar, retornando um valor
-		// que deverá ser armazenado no buffer
+		// envia o comando para a CPU processar
 		$processamento = $this->CPU->processaComando($comando);
 
 		// Grava o valor retornado na memoria Ram
+		$this->MemoriaRam->memoria = $this->CPU->memoria;
 
 		// Passa para a próxima linha do código
 		$this->linhaAtual++;
@@ -60,6 +62,9 @@ class Barramento {
 		// Fica perguntando se o comando foi gravado na memória
 		while(true){
 			if($this->MemoriaRam->gravouNaMemoria){
+				print_r($this->MemoriaRam->memoria);
+				$this->CPU->defineCI($this->linhaAtual);
+				$this->CPU->memoria = $this->MemoriaRam->memoria;
 				break;
 			}
 		}
