@@ -35,12 +35,20 @@ class Barramento {
 	*/
 	public function processaComandoNaCpu($comando)
 	{
+		// define status de processado para false
+		$this->CPU->processouComando = false;
 
 		// envia o comando para a CPU processar
 		$processamento = $this->CPU->processaComando($comando);
 
-		// Grava o valor retornado na memoria Ram
-		$this->MemoriaRam->memoria = $this->CPU->memoria;
+		// Fica perguntando se o comando ja foi processado
+		while(true){
+			// Grava o valor retornado na memoria Ram
+			if($this->CPU->processouComando){
+				$this->MemoriaRam->memoria = $this->CPU->memoria;
+				break;
+			}
+		}
 
 		// Passa para a próxima linha do código
 		$this->linhaAtual++;
@@ -62,7 +70,6 @@ class Barramento {
 		// Fica perguntando se o comando foi gravado na memória
 		while(true){
 			if($this->MemoriaRam->gravouNaMemoria){
-				print_r($this->MemoriaRam->memoria);
 				$this->CPU->defineCI($this->linhaAtual);
 				$this->CPU->memoria = $this->MemoriaRam->memoria;
 				break;
