@@ -222,28 +222,54 @@ class EntradaSaida
 				}
 				continue;
 			}
+			else if (preg_match("/^IMUL\s+0X0(\w\w)\s*,\s*(\d+),\s*(\d+)\s*$/i", strtoupper($linha), $acertos)) {
+				/*
+				* IMUL (posiçao na memoria), (numero), (numero)
+				*/ 
+				if(hexdec($acertos[1]) > 16){ // verifica se a posição informada é válida
+					return [false, $i];
+				}
+
+				$i++;
+				$numero = (hexdec($acertos[2]) + 16 + 5) * (-1);
+				array_push($this->conteudo, [3, $numero, $acertos[2], $acertos[3]]);
+				continue;
+			}
 			else if (preg_match("/^IMUL\s+(\d+)\s*,\s*(\d+),\s*(\d+)\s*$/i", strtoupper($linha), $acertos)) {
 				/*
-				* IMUL (numero), (numero), (numero)
+				* IMUL (registrador), (numero), (numero)
 				*/ 
 				$i++;
 				array_push($this->conteudo, [3, $acertos[1], $acertos[2], -1]);
 				continue;
 			}
-			else if (preg_match("/^INC\s+(\dX\d+)\s*$/i", strtoupper($linha), $acertos)) { 
+			else if (preg_match("/^INC\s+0X0(\w\w)\s*$/i", strtoupper($linha), $acertos)) { 
 				/*
 				* INC (posião na memória)
 				*/
 				$i++;
-				array_push($this->conteudo, [3, $acertos[1], -1, -1]);
+				array_push($this->conteudo, [4, $acertos[1], -1, -1]);
 				continue;
 			}
-			else if (preg_match("/^INC\s+(\w)\s*$/i", strtoupper($linha), $acertos)) { 
+			else if (preg_match("/^INC\s+([ABCD])\s*$/i", strtoupper($linha), $acertos)) { 
 				/*
 				* INC (registrador)
 				*/
 				$i++;
-				array_push($this->conteudo, [3, $acertos[1], -1, -1]);
+				switch(strtoupper($acertos[1])){
+					case 'A':
+						array_push($this->conteudo, [4, -2, -1, -1]);
+					break;
+					case 'B':
+						array_push($this->conteudo, [4, -3, -1, -1]);
+					break;
+					case 'C':
+						array_push($this->conteudo, [4, -4, -1, -1]);
+					break;
+					case 'D': 
+						array_push($this->conteudo, [4, -5, -1, -1]);
+					break;
+				}
 				continue;
 			}
 			else {

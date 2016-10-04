@@ -1,6 +1,6 @@
 ADD A,14
 mov A,14
 mOv 0x10,54
-Imul 13,2,5
+Imul A,2,5
 add A, 2
 INC 0x001

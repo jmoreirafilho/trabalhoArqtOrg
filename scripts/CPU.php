@@ -151,7 +151,7 @@ class CPU extends MemoriaRam
 					$valor2 = self::pegaRegistradorD();
 					break;
 				default:
-					$valor2 = self::pegaPosicaoMemoria((($valor2 * -1) - 5));
+					$valor2 = self::pegaPosicaoMemoria((($valor2 * -1) - 6));
 					break;
 			}
 		}
@@ -183,7 +183,7 @@ class CPU extends MemoriaRam
 					self::defineRegistradorD($valor);
 					break;
 				default:
-					$pos = ($valor2 * -1) - 5;
+					$pos = ($valor2 * -1) - 6;
 					$valor1 = self::pegaPosicaoMemoria($pos);
 					$valor = $valor1 + $valor2;
 					self::definePosicaoMemoria($pos, $valor);
@@ -220,7 +220,7 @@ class CPU extends MemoriaRam
 					$valor2 = self::pegaRegistradorD();
 					break;
 				default:
-					$valor2 = self::pegaPosicaoMemoria((($valor2 * -1) - 5));
+					$valor2 = self::pegaPosicaoMemoria((($valor2 * -1) - 6));
 					break;
 			}
 		}
@@ -242,6 +242,7 @@ class CPU extends MemoriaRam
 				self::defineRegistradorD($valor2);
 				break;
 			default:
+				$pos = ($valor1 * -1) - 6;
 				self::definePosicaoMemoria($pos, $valor2);
 				break;
 		}
@@ -266,7 +267,26 @@ class CPU extends MemoriaRam
 	 */
 	public function processaComandoInc($comando)
 	{
+		$pos = ($comando[1] * -1) - 6;
 		
+		switch ($comando[1]) {
+			case '-2':
+				self::defineRegistradorA(self::pegaRegistradorA() + 1);
+				break;
+			case '-3':
+				self::defineRegistradorB(self::pegaRegistradorB() + 1);
+				break;
+			case '-4':
+				self::defineRegistradorC(self::pegaRegistradorC() + 1);
+				break;
+			case '-5':
+				self::defineRegistradorD(self::pegaRegistradorD() + 1);
+				break;
+			default:
+				self::definePosicaoMemoria(self::pegaPosicaoMemoria($pos) + 1);
+				break;
+		}
+		$this->processouComando = true;
 	}
 
 	/**
