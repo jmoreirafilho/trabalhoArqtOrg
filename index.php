@@ -52,6 +52,13 @@ class Barramento {
 
 		// Passa para a próxima linha do código
 		$this->linhaAtual++;
+
+		// EXIBIR MEMORIA
+		print_r($this->MemoriaRam->memoria);
+		echo "<br />";
+
+		// Envia próximo comando do buffer para a RAM
+		self::enviaBufferParaRam();
 	}
 
 	/**
@@ -64,18 +71,25 @@ class Barramento {
 		// pega o comando
 		$comando = $this->EntradaSaida->buffer($this->linhaAtual);
 
-		// joga o comando na RAM
-		$this->MemoriaRam->recebeComando($comando);
+		if($comando < 0){
+			echo "Fim!";
+			return;
+		} else {
+			// define status de gravação na memoria RAM para false
+			$this->MemoriaRam->gravouNaMemoria = false;
+			// joga o comando na RAM
+			$this->MemoriaRam->recebeComando($comando);
 
-		// Fica perguntando se o comando foi gravado na memória
-		while(true){
-			if($this->MemoriaRam->gravouNaMemoria){
-				$this->CPU->defineCI($this->linhaAtual);
-				$this->CPU->memoria = $this->MemoriaRam->memoria;
-				break;
+			// Fica perguntando se o comando foi gravado na memória
+			while(true){
+				if($this->MemoriaRam->gravouNaMemoria){
+					$this->CPU->defineCI($this->linhaAtual);
+					$this->CPU->memoria = $this->MemoriaRam->memoria;
+					break;
+				}
 			}
+			self::processaComandoNaCpu($comando);
 		}
-		self::processaComandoNaCpu($comando);
 	}
 
 }

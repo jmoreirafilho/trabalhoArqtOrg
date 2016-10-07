@@ -68,7 +68,7 @@ class EntradaSaida
 				$i++;
 				array_push($this->conteudo, [1, $numero, $acertos[2], -1]);
 			}
-			else if (preg_match("/^MOV\s+0X0(\w\w)\s*,\s*([ABCD])\s*$/i", strtoupper($linha), $acertos)) {
+			else if (preg_match("/^MOV\s+0X0*(\w\w)\s*,\s*([ABCD])\s*$/i", strtoupper($linha), $acertos)) {
 				/*
 				* MOV (posição da memoria), (registrador)
 				*/
@@ -95,7 +95,50 @@ class EntradaSaida
 					break;
 				}
 			}
-			else if (preg_match("/^MOV\s+([ABCD])\s*,\s*0X0(\w\w)\s*$/i", strtoupper($linha), $acertos)) {
+			else if (preg_match("/^MOV\s+0X0*(\w\w)\s*,\s*0X0*(\w\w)\s*$/i", strtoupper($linha), $acertos)) {
+				/*
+				* MOV (posiçao da memoria), numero
+				*/
+				$numero1 = (hexdec($acertos[1]) + 16 + 5) * (-1);
+				if($numero1 > 16){ // verifica se a posição informada é válida
+					return [false, $i];
+				}
+
+				$numero2 = (hexdec($acertos[2]) + 16 + 5) * (-1);
+				if($numero2 > 16){ // verifica se a posição informada é válida
+					return [false, $i];
+				}
+				$i++;
+				array_push($this->conteudo, [1, $numero1, $numero2, -1]);
+			}
+			else if (preg_match("/^MOV\s+0X0*(\w\w)\s*,\s*([ABCD])\s*$/i", strtoupper($linha), $acertos)) {
+				/*
+				* MOV (posição da memoria), (registrador)
+				*/
+
+				if(hexdec($acertos[1]) > 16){ // verifica se a posição informada é válida
+					return [false, $i];
+				}
+
+				$i++;
+
+				$numero = (hexdec($acertos[1]) + 16 + 5) * (-1);
+				switch(strtoupper($acertos[2])){
+					case 'A':
+						array_push($this->conteudo, [1, $numero, -2, -1]);
+					break;
+					case 'B':
+						array_push($this->conteudo, [1, $numero, -3, -1]);
+					break;
+					case 'C':
+						array_push($this->conteudo, [1, $numero, -4, -1]);
+					break;
+					case 'D': 
+						array_push($this->conteudo, [1, $numero, -5, -1]);
+					break;
+				}
+			}
+			else if (preg_match("/^MOV\s+([ABCD])\s*,\s*0X0*(\w\w)\s*$/i", strtoupper($linha), $acertos)) {
 				/*
 				* MOV (registrador), (posição da memoria)
 				*/
@@ -107,6 +150,42 @@ class EntradaSaida
 				$i++;
 				
 				$numero = (hexdec($acertos[2]) + 16 + 5) * (-1);
+				switch(strtoupper($acertos[1])){
+					case 'A':
+						array_push($this->conteudo, [1, -2, $numero, -1]);
+					break;
+					case 'B':
+						array_push($this->conteudo, [1, -3, $numero, -1]);
+					break;
+					case 'C':
+						array_push($this->conteudo, [1, -4, $numero, -1]);
+					break;
+					case 'D': 
+						array_push($this->conteudo, [1, -5, $numero, -1]);
+					break;
+				}
+			}
+			else if (preg_match("/^MOV\s+([ABCD])\s*,\s*([ABCD])\s*$/i", strtoupper($linha), $acertos)) {
+				/*
+				* MOV (registrador), (posição da memoria)
+				*/
+				$numero;
+				switch ($acertos[2]) {
+					case 'A':
+						$numero = -2;
+					break;
+					case 'B':
+						$numero = -3;
+					break;
+					case 'C':
+						$numero = -4;
+					break;
+					case 'D': 
+						$numero = -5;
+					break;
+				}
+				$i++;
+				
 				switch(strtoupper($acertos[1])){
 					case 'A':
 						array_push($this->conteudo, [1, -2, $numero, -1]);
@@ -153,7 +232,7 @@ class EntradaSaida
 				array_push($this->conteudo, [2, $acertos[1], $acertos[2], -1]);
 				continue;
 			}
-			else if (preg_match("/^ADD\s+0X0(\w\w)\s*,\s*(\d+)\s*$/i", strtoupper($linha), $acertos)) {
+			else if (preg_match("/^ADD\s+0X0*(\w\w)\s*,\s*(\d+)\s*$/i", strtoupper($linha), $acertos)) {
 				/*
 				* ADD (posição da memoria), (numero)
 				*/
@@ -167,7 +246,7 @@ class EntradaSaida
 				array_push($this->conteudo, [2, $numero, $acertos[2], -1]);
 				continue;
 			}
-			else if (preg_match("/^ADD\s+0X0(\w\w)\s*,\s*([ABCD])\s*$/i", strtoupper($linha), $acertos)) {
+			else if (preg_match("/^ADD\s+0X0*(\w\w)\s*,\s*([ABCD])\s*$/i", strtoupper($linha), $acertos)) {
 				/*
 				* ADD (posição da memoria), (registrador)
 				*/
@@ -195,7 +274,7 @@ class EntradaSaida
 				array_push($this->conteudo, [2, $acertos[1], $acertos[2], -1]);
 				continue;
 			}
-			else if (preg_match("/^ADD\s+([ABCD])\s*,\s*0X0(\w\w)\s*$/i", strtoupper($linha), $acertos)) {
+			else if (preg_match("/^ADD\s+([ABCD])\s*,\s*0X0*(\w\w)\s*$/i", strtoupper($linha), $acertos)) {
 				/*
 				* ADD (registrador), (posição da memoria)
 				*/
@@ -222,28 +301,86 @@ class EntradaSaida
 				}
 				continue;
 			}
-			else if (preg_match("/^IMUL\s+0X0(\w\w)\s*,\s*(\d+),\s*(\d+)\s*$/i", strtoupper($linha), $acertos)) {
+			else if (preg_match("/^IMUL\s+(\w+)\s*,\s*(\w+)\s*,\s*(\w+)\s*$/i", strtoupper($linha), $acertos)) {
 				/*
-				* IMUL (posiçao na memoria), (numero), (numero)
-				*/ 
-				if(hexdec($acertos[1]) > 16){ // verifica se a posição informada é válida
+				* IMUL (X), (Y), (Z)
+				*/
+				$pos1 = $acertos[1];
+				if(substr($acertos[1], 0, 2) == "0X" && hexdec($acertos[1]) > 16){ // verifica se a posição informada é válida
 					return [false, $i];
+				} else if (substr($acertos[1], 0, 2) == "0X" && hexdec($acertos[1]) <= 16){
+					if(preg_match("/0X0*(\w+)/i", strtoupper($acertos[1]), $acerto)){
+						$pos1 = (hexdec($acerto[1]) + 16 + 5) * (-1);
+					} else {
+						return [false, $i];
+					}
+				} else if ($acertos[1] < 'A' || $acertos[1] < 'B' || $acertos[1] < 'C' || $acertos[1] < 'D'){
+					switch ($acertos[1]) {
+						case 'A':
+							$pos1 = -2;
+						break;
+						case 'B':
+							$pos1 = -3;
+						break;
+						case 'C':
+							$pos1 = -4;
+						break;
+						case 'D': 
+							$pos1 = -5;
+						break;
+					}
+				}
+
+				$pos2 = $acertos[2];
+				if(substr($acertos[2], 0, 2) == "0X" && hexdec($acertos[2]) > 16){ // verifica se a posição informada é válida
+					return [false, $i];
+				} else if (substr($acertos[2], 0, 2) == "0X" && hexdec($acertos[2]) <= 16){
+					$pos2 = (hexdec($acertos[2]) + 16 + 5) * (-1);
+				} else if ($acertos[2] < 'A' || $acertos[2] < 'B' || $acertos[2] < 'C' || $acertos[2] < 'D'){
+					switch ($acertos[2]) {
+						case 'A':
+							$pos2 = -2;
+						break;
+						case 'B':
+							$pos2 = -3;
+						break;
+						case 'C':
+							$pos2 = -4;
+						break;
+						case 'D': 
+							$pos2 = -5;
+						break;
+					}
+				}
+
+				$pos3 = $acertos[3];
+				if(substr($acertos[3], 0, 2) == "0X" && hexdec($acertos[3]) > 16){ // verifica se a posição informada é válida
+					return [false, $i];
+				} else if (substr($acertos[3], 0, 2) == "0X" && hexdec($acertos[3]) <= 16){
+					$pos3 = (hexdec($acertos[3]) + 16 + 5) * (-1);
+				} else if ($acertos[3] < 'A' || $acertos[3] < 'B' || $acertos[3] < 'C' || $acertos[3] < 'D'){
+					switch ($acertos[3]) {
+						case 'A':
+							$pos3 = -2;
+						break;
+						case 'B':
+							$pos3 = -3;
+						break;
+						case 'C':
+							$pos3 = -4;
+						break;
+						case 'D': 
+							$pos3 = -5;
+						break;
+					}
 				}
 
 				$i++;
-				$numero = (hexdec($acertos[2]) + 16 + 5) * (-1);
-				array_push($this->conteudo, [3, $numero, $acertos[2], $acertos[3]]);
+
+				array_push($this->conteudo, [3, $pos1, $pos2, $pos3]);
 				continue;
 			}
-			else if (preg_match("/^IMUL\s+(\d+)\s*,\s*(\d+),\s*(\d+)\s*$/i", strtoupper($linha), $acertos)) {
-				/*
-				* IMUL (registrador), (numero), (numero)
-				*/ 
-				$i++;
-				array_push($this->conteudo, [3, $acertos[1], $acertos[2], -1]);
-				continue;
-			}
-			else if (preg_match("/^INC\s+0X0(\w\w)\s*$/i", strtoupper($linha), $acertos)) { 
+			else if (preg_match("/^INC\s+0X0*(\w\w)\s*$/i", strtoupper($linha), $acertos)) { 
 				/*
 				* INC (posião na memória)
 				*/
@@ -291,8 +428,8 @@ class EntradaSaida
 		fclose($arquivo);
 		$analisador = self::conversorSinstatico($conteudo);
 		if(!$analisador[0]){
+			echo "Você possui erros em sua sintaxe. Linha: ".$analisador[1]." - <strong>".$conteudo[$analisador[1] - 1]."</strong>";
 			$this->conteudo = [];
-			echo "Você possui erros em sua sintaxe. Linha: ".($analisador[1]);
 		}
 	}
 
@@ -304,6 +441,9 @@ class EntradaSaida
 	*/
 	public function buffer($linhaAtual)
 	{
+		if($linhaAtual == (count($this->conteudo) - 1)){
+			return -1;
+		}
 		return $this->conteudo[$linhaAtual];
 	}
 

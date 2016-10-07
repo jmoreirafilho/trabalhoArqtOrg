@@ -43,8 +43,14 @@ class TesteUnitario
 	public function testaEntradaSaida()
 	{
 		$this->EntradaSaida = new EntradaSaida();
-		$this->EntradaSaida->conversorSinstatico(["mov 0X01, 5"]);
-		print_r($this->EntradaSaida->conteudo);
+		// $this->EntradaSaida->conversorSinstatico(["mov a, a"]);
+		$this->EntradaSaida->conversorSinstatico(["mov 0x0001, 0X00000001"]);
+		// $this->EntradaSaida->conversorSinstatico(["mov A, 2"]);
+		print_r($this->EntradaSaida->conteudo[0]);
+		echo "<br />";
+		// print_r($this->EntradaSaida->conteudo[1]);
+		echo "<br />";
+		// print_r($this->EntradaSaida->conteudo[2]);
 	}
 }
 

@@ -1,6 +1,4 @@
-ADD A,14
-mov A,14
-mOv 0x10,54
-Imul A,2,5
-add A, 2
-INC 0x001
+MOV A, 2
+MOv b, 5
+mov 0x001, 10
+add 0x001, a
