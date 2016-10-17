@@ -1,98 +1,54 @@
-<?php 
+<html>
+<meta charset="UTF-8">
+	<head>
+		<title>
+			Setup Inicial
+		</title>
+		<link rel="stylesheet" href="styles/bootstrap.min.css">
+		<link rel="stylesheet" href="styles/style.css">
+	</head>
+	<body>
+		
+		<div class="row top-bar">&emsp;</div>
+		
+		<div class="col-sm-10 col-sm-offset-1">
+			
+			<form action="scripts/inicio.php" method="post">
+				<div class="panel panel-primary">
+					<div class="panel-heading title">Tela de Parametrizações</div>
+					<div class="panel-body">
 
-include('scripts/EntradaSaida.php');
-include('scripts/MemoriaRam.php');
-include('scripts/CPU.php');
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label for="largura">Largura do Barramento</label>
+								<input name="largura" id="largura" type="text" class="form-control" placeholder="Informe apenas números inteiros" />
+							</div>
+						</div>
 
-class Barramento {
-	private $EntradaSaida;
-	private $MemoriaRam;
-	private $CPU;
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label for="frequencia">Frequência</label>
+								<input name="frequencia" id="frequencia" type="text" class="form-control" placeholder="Informe apenas números inteiros" />
+							</div>
+						</div>
 
-	public $linhaAtual = 0;
+						<div class="col-lg-4 col-sm-6">
+							<div class="form-group">
+								<label for="tamanho">Tamanho</label>
+								<input name="tamanho" id="tamanho" type="text" class="form-control" placeholder="Informe apenas números inteiros" />
+							</div>
+						</div>
 
-	function __construct()
-	{
-		// chama classe EntradaSaida
-		$this->EntradaSaida = new EntradaSaida();
-		// lê arquivo e grava em $conteudo
-		$this->EntradaSaida->lerArquivo();
-		// chama classe MemoriaRam
-		$this->MemoriaRam = new MemoriaRam();
-		// chama classe CPU
-		$this->CPU = new CPU();
-
-		if(count($this->EntradaSaida->conteudo) > 0){
-			self::enviaBufferParaRam();
-		}
-	}
-
-	/**
-	 * Recebe um comando e envia para a CPU, fica esperando ser processado. Quando
-	 * for processado, passa para a próxima linha do codigo ASM e enviaBuffer da nova linha
-	 * 
-	 * @param Array $comando Comando trazido direto do buffer.
-	*/
-	public function processaComandoNaCpu($comando)
-	{
-		// define status de processado para false
-		$this->CPU->processouComando = false;
-
-		// envia o comando para a CPU processar
-		$processamento = $this->CPU->processaComando($comando);
-
-		// Fica perguntando se o comando ja foi processado
-		while(true){
-			// Grava o valor retornado na memoria Ram
-			if($this->CPU->processouComando){
-				$this->MemoriaRam->memoria = $this->CPU->memoria;
-				break;
-			}
-		}
-
-		// Passa para a próxima linha do código
-		$this->linhaAtual++;
-
-		// EXIBIR MEMORIA
-		print_r($this->MemoriaRam->memoria);
-		echo "<br />";
-
-		// Envia próximo comando do buffer para a RAM
-		self::enviaBufferParaRam();
-	}
-
-	/**
-	 * Chama as classes EntradaSaida e MemoriaRam e pega o comando em Buffer,
-	 * de acordo com a linhaAtual. Joga esse comando na MemoriaRam e fica esperando
-	 * o comando ser gravado na memória, quando for gravado envia pra cpu.
-	*/
-	public function enviaBufferParaRam()
-	{
-		// pega o comando
-		$comando = $this->EntradaSaida->buffer($this->linhaAtual);
-
-		if($comando < 0){
-			echo "Fim!";
-			return;
-		} else {
-			// define status de gravação na memoria RAM para false
-			$this->MemoriaRam->gravouNaMemoria = false;
-			// joga o comando na RAM
-			$this->MemoriaRam->recebeComando($comando);
-
-			// Fica perguntando se o comando foi gravado na memória
-			while(true){
-				if($this->MemoriaRam->gravouNaMemoria){
-					$this->CPU->defineCI($this->linhaAtual);
-					$this->CPU->memoria = $this->MemoriaRam->memoria;
-					break;
-				}
-			}
-			self::processaComandoNaCpu($comando);
-		}
-	}
-
-}
-
-new Barramento();
-?>
+					</div>
+					<div class="panel-footer align-right">
+						<input type="submit" class="btn btn-primary" value="Salvar" />
+						<input type="reset" class="btn btn-danger" value="Limpar" />
+					</div>
+				</div>
+			</form>
+		</div>
+	
+		<script src="styles/jquery.min.js"></script>
+		<script src="styles/angular.min.js"></script>
+	</body>
+</html>

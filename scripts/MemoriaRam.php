@@ -1,6 +1,8 @@
 <?php 
 
-class MemoriaRam 
+namespace Barramento;
+
+class MemoriaRam extends Barramento
 {
 	public $gravouNaMemoria = false;
 	public $posicaoDaMemoria = 0;
@@ -11,6 +13,7 @@ class MemoriaRam
 
 	function __construct()
 	{
+		echo $this->tamanho;
 		$this->gravouNaMemoria = false;
 	}
 

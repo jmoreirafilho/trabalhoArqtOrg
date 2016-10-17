@@ -183,7 +183,7 @@ class CPU extends MemoriaRam
 					self::defineRegistradorD($valor);
 					break;
 				default:
-					$pos = ($valor2 * -1) - 5;
+					$pos = ($valor1 * -1) - 5;
 					$valor1 = self::pegaPosicaoMemoria($pos);
 					$valor = $valor1 + $valor2;
 					self::definePosicaoMemoria($pos, $valor);

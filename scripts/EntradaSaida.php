@@ -1,6 +1,8 @@
 <?php 
 
-class EntradaSaida 
+namespace EntradaSaida;
+
+class EntradaSaida
 {
 	/**
 	 * DICIONARIO
@@ -22,7 +24,7 @@ class EntradaSaida
 	*/
 	function __construct()
 	{
-		// não faz nada
+		// echo Barramento\Barramento::setTamanho();
 	}
 
 	/**
@@ -420,18 +422,18 @@ class EntradaSaida
 	 * Pega arquivo, quebra as linhas em um array e chama a função para validar
 	 * a sintaxe. Exibe o erro, caso a validação falhe.
 	*/
-	function lerArquivo()
-	{
-		$local = "asm.txt";
-		$arquivo = fopen($local, 'r');
-		$conteudo = explode("\n", fread($arquivo, filesize($local)));
-		fclose($arquivo);
-		$analisador = self::conversorSinstatico($conteudo);
-		if(!$analisador[0]){
-			echo "Você possui erros em sua sintaxe. Linha: ".$analisador[1]." - <strong>".$conteudo[$analisador[1] - 1]."</strong>";
-			$this->conteudo = [];
-		}
-	}
+	// function lerArquivo()
+	// {
+	// 	$local = "asm.txt";
+	// 	$arquivo = fopen($local, 'r');
+	// 	$conteudo = explode("\n", fread($arquivo, filesize($local)));
+	// 	fclose($arquivo);
+	// 	$analisador = self::conversorSinstatico($conteudo);
+	// 	if(!$analisador[0]){
+	// 		echo "Você possui erros em sua sintaxe. Linha: ".$analisador[1]." - <strong>".$conteudo[$analisador[1] - 1]."</strong>";
+	// 		$this->conteudo = [];
+	// 	}
+	// }
 
 	/**
 	 * Recebe um id e retorna o conteudo dessa linha.
@@ -439,13 +441,13 @@ class EntradaSaida
 	 * @param int $linhaAtual Id da linha no array de conteudo.
 	 * @return Conteudo na posição informada do array de conteudo.
 	*/
-	public function buffer($linhaAtual)
-	{
-		if($linhaAtual == (count($this->conteudo) - 1)){
-			return -1;
-		}
-		return $this->conteudo[$linhaAtual];
-	}
+	// public function buffer($linhaAtual)
+	// {
+	// 	if($linhaAtual == (count($this->conteudo) - 1)){
+	// 		return -1;
+	// 	}
+	// 	return $this->conteudo[$linhaAtual];
+	// }
 
 }
 
