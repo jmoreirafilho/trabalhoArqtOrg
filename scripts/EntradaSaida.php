@@ -1,7 +1,5 @@
 <?php 
 
-namespace EntradaSaida;
-
 class EntradaSaida
 {
 	/**
@@ -24,6 +22,9 @@ class EntradaSaida
 	*/
 	function __construct()
 	{
+		echo ">> ".Componente::$barramento->pegaTamanho()."<br />";
+		Componente::$barramento->defineTamanho(30);
+		echo ">> ".Componente::$barramento->tamanho."<br />";
 		// echo Barramento\Barramento::setTamanho();
 	}
 

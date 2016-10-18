@@ -1,19 +1,17 @@
 <?php 
 
-namespace Barramento;
-
 class Barramento {
 
 	public $abertoParaRam;
 	public $abertoParaCpu;
 	public $abertoParaES;
 
-	public $linhaAtual;
-	public $tamanho = 5;
+	// public $linhaAtual;
+	public $tamanho = 20;
 	public $frequencia;
 	public $largura;
 
-	public $comando = [];
+	// public $comando = [];
 
 	function __construct()
 	{
@@ -61,8 +59,7 @@ class Barramento {
 	 */
 	public function defineTamanho($value)
 	{
-		echo Barramento->tamanho;
-		// Barramento\Barramento::tamanho = $value;
+		$this->tamanho = $value;
 	}
 
 
@@ -70,57 +67,57 @@ class Barramento {
 	 * Pega a frequencia de comandos que passam pelo barramento, parametrizado
 	 * @return int Frequencia de comandos que passam pelo barramento
 	 */
-	public function pegaFrequencia()
-	{
-		return $this->frequencia;
-	}
+	// public function pegaFrequencia()
+	// {
+	// 	return $this->frequencia;
+	// }
 
 	/**
 	 * Define a frequencia de comandos que passam pelo barramento, parametrizado
 	 * @param int $value
 	 */
-	public function defineFrequencia($value)
-	{
-		$this->frequencia = $value;
-	}
+	// public function defineFrequencia($value)
+	// {
+	// 	$this->frequencia = $value;
+	// }
 
 
 	/**
 	 * Pega a largura do barramento, parametrizada
 	 * @return int Largura do barramento
 	 */
-	public function pegaLargura()
-	{
-		return $this->largura;
-	}
+	// public function pegaLargura()
+	// {
+	// 	return $this->largura;
+	// }
 
 	/**
 	 * Dfine a largura do barramento, parametrizado
 	 * @param int $value
 	 */
-	public function defineLargura($value)
-	{
-		$this->largura = $value;
-	}
+	// public function defineLargura($value)
+	// {
+	// 	$this->largura = $value;
+	// }
 
 
 	/**
 	 * Pega o comando no barramento, enviado pela EntradaSaida
 	 * @return Array
 	 */
-	public function pegaComando()
-	{
-		return $this->comando;
-	}
+	// public function pegaComando()
+	// {
+	// 	return $this->comando;
+	// }
 
 	/**
 	 * Define o comando, enviado pela EntradaSaida
 	 * @param Array $value 
 	 */
-	public function defineComando($value)
-	{
-		$this->comando = $value;
-	}
+	// public function defineComando($value)
+	// {
+	// 	$this->comando = $value;
+	// }
 
 
 
@@ -136,64 +133,64 @@ class Barramento {
 	 * 
 	 * @param Array $comando Comando trazido direto do buffer.
 	*/
-	public function processaComandoNaCpu($comando)
-	{
-		// define status de processado para false
-		$this->CPU->processouComando = false;
+	// public function processaComandoNaCpu($comando)
+	// {
+	// 	// define status de processado para false
+	// 	$this->CPU->processouComando = false;
 
-		// envia o comando para a CPU processar
-		$processamento = $this->CPU->processaComando($comando);
+	// 	// envia o comando para a CPU processar
+	// 	$processamento = $this->CPU->processaComando($comando);
 
-		// Fica perguntando se o comando ja foi processado
-		while(true){
-			// Grava o valor retornado na memoria Ram
-			if($this->CPU->processouComando){
-				$this->MemoriaRam->memoria = $this->CPU->memoria;
-				break;
-			}
-		}
+	// 	// Fica perguntando se o comando ja foi processado
+	// 	while(true){
+	// 		// Grava o valor retornado na memoria Ram
+	// 		if($this->CPU->processouComando){
+	// 			$this->MemoriaRam->memoria = $this->CPU->memoria;
+	// 			break;
+	// 		}
+	// 	}
 
-		// Passa para a próxima linha do código
-		$this->linhaAtual++;
+	// 	// Passa para a próxima linha do código
+	// 	$this->linhaAtual++;
 
-		// EXIBIR MEMORIA
-		print_r($this->MemoriaRam->memoria);
-		echo "<br />";
+	// 	// EXIBIR MEMORIA
+	// 	print_r($this->MemoriaRam->memoria);
+	// 	echo "<br />";
 
-		// Envia próximo comando do buffer para a RAM
-		self::enviaBufferParaRam();
-	}
+	// 	// Envia próximo comando do buffer para a RAM
+	// 	self::enviaBufferParaRam();
+	// }
 
 	/**
 	 * Chama as classes EntradaSaida e MemoriaRam e pega o comando em Buffer,
 	 * de acordo com a linhaAtual. Joga esse comando na MemoriaRam e fica esperando
 	 * o comando ser gravado na memória, quando for gravado envia pra cpu.
 	*/
-	public function enviaBufferParaRam()
-	{
-		// pega o comando
-		$comando = $this->EntradaSaida->buffer($this->linhaAtual);
+	// public function enviaBufferParaRam()
+	// {
+	// 	// pega o comando
+	// 	$comando = $this->EntradaSaida->buffer($this->linhaAtual);
 
-		if($comando < 0){
-			echo "Fim!";
-			return;
-		} else {
-			// define status de gravação na memoria RAM para false
-			$this->MemoriaRam->gravouNaMemoria = false;
-			// joga o comando na RAM
-			$this->MemoriaRam->recebeComando($comando);
+	// 	if($comando < 0){
+	// 		echo "Fim!";
+	// 		return;
+	// 	} else {
+	// 		// define status de gravação na memoria RAM para false
+	// 		$this->MemoriaRam->gravouNaMemoria = false;
+	// 		// joga o comando na RAM
+	// 		$this->MemoriaRam->recebeComando($comando);
 
-			// Fica perguntando se o comando foi gravado na memória
-			while(true){
-				if($this->MemoriaRam->gravouNaMemoria){
-					$this->CPU->defineCI($this->linhaAtual);
-					$this->CPU->memoria = $this->MemoriaRam->memoria;
-					break;
-				}
-			}
-			self::processaComandoNaCpu($comando);
-		}
-	}
+	// 		// Fica perguntando se o comando foi gravado na memória
+	// 		while(true){
+	// 			if($this->MemoriaRam->gravouNaMemoria){
+	// 				$this->CPU->defineCI($this->linhaAtual);
+	// 				$this->CPU->memoria = $this->MemoriaRam->memoria;
+	// 				break;
+	// 			}
+	// 		}
+	// 		self::processaComandoNaCpu($comando);
+	// 	}
+	// }
 
 }
 ?>

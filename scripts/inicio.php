@@ -1,40 +1,29 @@
 <?php 
-namespace Inicio;
 
-include 'Barramento.php';
+include 'Componente.php';
 include 'EntradaSaida.php';
-
-use Barramento;
-use EntradaSaida;
+include 'MemoriaRam.php';
 
 /**
 * Início
 */
 class Inicio
 {
-	// use Barramento;
 
 	function __construct()
 	{
-		// $tamanho = $_POST['tamanho'];
-		// $frequencia = $_POST['frequencia'];
-		// $largura = $_POST['largura'];
-		
-		// setcookie("tamanho", $tamanho);
-		// setcookie("frequencia", $frequencia);
-		// setcookie("largura", $largura);
+		$tamanho = $_POST['tamanho'];
+		$largura = $_POST['largura'];
+		$frequencia = $_POST['frequencia'];
 
-		new Barramento\Barramento;
+		new Componente();
 
-		new EntradaSaida\EntradaSaida;
+		Componente::$barramento->defineTamanho($tamanho);
+		Componente::$barramento->defineLargura($largura);
+		Componente::$barramento->defineTamanho($frequencia);
 
-		\Barramento\Barramento::defineTamanho(5);
-		// Barramento::sayHello();
-		// new EntradaSaida();
-		// new MemoriaRam();
-
-		// echo Barramento::abertoParaES;
-		// new CPU();
+		new EntradaSaida();
+		new MemoriaRam();
 	}
 }
 
